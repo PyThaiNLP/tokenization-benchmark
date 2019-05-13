@@ -21,8 +21,9 @@ class TestSegmentationBenchmark(unittest.TestCase):
 
     def test_compute_stats(self):
 
+        print('')
         for exp, act in TEST_DATA:
-            print('%s <-> %s' % (exp, act))
+            print('Expected: %s\n  Actual: %s' % (exp, act))
             result = word_segmentation._compute_stats(
                 exp,
                 act

@@ -7,15 +7,6 @@ def benchmark(ref_samples, samples ):
         # @todo #1 compulte stats for all samples
         pass
 
-def _compute_metrics(tp, fp, tn, fn):
-    precision = tp / (tp + fp)
-    recall = tp / (tp + fn)
-    return {
-        'precision': precision,
-        'recall': recall,
-        'f1': 2*(precision*recall) / (precision + recall)
-    }
-
 def _compute_stats(ref_sample, sample):
     ref_sample, _ = _binary_representation(ref_sample)
     sample, _ = _binary_representation(sample)
@@ -29,7 +20,21 @@ def _compute_stats(ref_sample, sample):
     c_tn = np.sum(ref_sample[c_neg_pred] == 0)
     c_fn = np.sum(ref_sample[c_neg_pred] == 1)
 
-    # @todo #1 compute stats for word level
+    precision = c_tp / (c_tp + c_fp)
+    recall = c_tp / (c_tp + c_fn)
+    f1 = 2*(precision*recall) / (precision + recall)
+
+    # Word Level
+    boundary = np.argwhere(ref_sample == 1).reshape(-1)
+    start_idx = boundary
+    stop_idx = boundary[1:].tolist() + [ref_sample.shape[0]]
+
+    is_correctly_tokenised = []
+    for st, end in zip(start_idx, stop_idx):
+        if sample[st] == 1 and np.sum(sample[st+1:end]) == 0:
+            is_correctly_tokenised.append(1)
+        else:
+            is_correctly_tokenised.append(0)
 
     return {
         'char_level': {
@@ -37,7 +42,12 @@ def _compute_stats(ref_sample, sample):
             'fp': c_fp,
             'tn': c_tn,
             'fn': c_fn,
-            **_compute_metrics(c_tp, c_fp, c_tn, c_fn)
+            'precision': precision,
+            'recall': recall,
+            'f1': f1
+        },
+        'word_level': {
+            'accuracy':  np.sum(is_correctly_tokenised) / len(is_correctly_tokenised)
         }
     }
 
