@@ -1,12 +1,12 @@
 import unittest
-from pythainlp.benchmarks import word_segmentation
-# print(sys.path)
+import yaml
+import os
 
-TEST_DATA = [
-    # expected ,actual
-    ("ผม|ไม่|ชอบ|กิน|ผัก", "ผม|ไม่|ชอบ|กิน|ผัก"),
-    ("ผม|ไม่|ชอบ|กิน|ผัก", "ผม|ไม่|ชอบ|กินผัก"),
-]
+from pythainlp.benchmarks import word_segmentation
+
+def _print(text):
+    if "TEST_VERBOSE" in os.environ and os.environ["TEST_VERBOSE"]:
+        print(text)
 
 class TestSegmentationBenchmark(unittest.TestCase):
     def test_binary_representation(self):
@@ -17,19 +17,22 @@ class TestSegmentationBenchmark(unittest.TestCase):
             [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
             rept.tolist()
         )
-        
 
     def test_compute_stats(self):
+        with open("./tests/data/sentences.yml", 'r') as stream:
+            test_sentences = yaml.safe_load(stream)
 
-        print('')
-        for exp, act in TEST_DATA:
-            print('Expected: %s\n  Actual: %s' % (exp, act))
+        _print('')
+        for pair in test_sentences:
+            exp, act = pair['expected'], pair['actual']
+
+            _print('Expected: %s\n  Actual: %s' % (exp, act))
             result = word_segmentation._compute_stats(
                 exp,
                 act
             ) 
 
-            print(result)
+            _print(result)
         self.assertEqual(True, True)
 
 if __name__ == '__main__':
