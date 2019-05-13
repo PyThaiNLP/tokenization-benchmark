@@ -28,8 +28,6 @@ def _read_file(path):
         lines = map(lambda r: r.strip(), f.readlines())
     return list(lines)
 
-# @todo #1 read input file / compute state
-# @todo #1 print stats
 print(args.input)
 actual = _read_file(args.input)
 expected = _read_file(args.custom_test_file)
