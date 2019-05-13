@@ -2,7 +2,7 @@ import unittest
 import yaml
 import os
 
-from pythainlp.benchmarks import word_segmentation
+from pythainlp.benchmarks import word_tokenisation
 
 def _print(text):
     if "TEST_VERBOSE" in os.environ and os.environ["TEST_VERBOSE"]:
@@ -11,7 +11,7 @@ def _print(text):
 class TestSegmentationBenchmark(unittest.TestCase):
     def test_binary_representation(self):
         sentence = "อากาศ|ร้อน|มาก|ครับ"
-        rept, _ = word_segmentation._binary_representation(sentence)
+        rept, _ = word_tokenisation._binary_representation(sentence)
 
         self.assertEqual(
             [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
@@ -27,7 +27,7 @@ class TestSegmentationBenchmark(unittest.TestCase):
             exp, act = pair['expected'], pair['actual']
 
             _print('Expected: %s\n  Actual: %s' % (exp, act))
-            result = word_segmentation._compute_stats(
+            result = word_tokenisation._compute_stats(
                 exp,
                 act
             ) 
