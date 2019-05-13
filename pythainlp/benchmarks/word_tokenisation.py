@@ -1,11 +1,26 @@
 import numpy as np
+import pandas as pd
 
 SEPARATOR = "|"
 
-def benchmark(ref_samples, samples ):
+def flatten_dict(my_dict, parent_key="", sep=":"):
+    items = []
+    for k, v in my_dict.items():
+        new_key = "%s%s%s" % (parent_key, sep, k) if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, parent_key=new_key).items())
+        else:
+            items.append((new_key, v))
+
+    return dict(items)
+
+def benchmark(ref_samples, samples):
+    results = []
     for r, s in zip(ref_samples, samples):
-        # @todo #1 compulte stats for all samples
-        pass
+        stats = flatten_dict(_compute_stats(r, s))
+        results.append(stats)
+
+    return pd.DataFrame(results)
 
 def _compute_stats(ref_sample, sample):
     ref_sample, _ = _binary_representation(ref_sample)

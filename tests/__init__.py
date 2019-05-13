@@ -4,6 +4,9 @@ import os
 
 from pythainlp.benchmarks import word_tokenisation
 
+with open("./tests/data/sentences.yml", 'r') as stream:
+    test_sentences = yaml.safe_load(stream)
+
 def _print(text):
     if "TEST_VERBOSE" in os.environ and os.environ["TEST_VERBOSE"]:
         print(text)
@@ -19,9 +22,6 @@ class TestSegmentationBenchmark(unittest.TestCase):
         )
 
     def test_compute_stats(self):
-        with open("./tests/data/sentences.yml", 'r') as stream:
-            test_sentences = yaml.safe_load(stream)
-
         _print('')
         for pair in test_sentences:
             exp, act = pair['expected'], pair['actual']
@@ -34,6 +34,19 @@ class TestSegmentationBenchmark(unittest.TestCase):
 
             _print(result)
         self.assertEqual(True, True)
+
+    def test_benchmark(self):
+        expected = []
+        actual = []
+        for pair in test_sentences:
+            expected.append(pair['expected'])
+            actual.append(pair['actual'])
+
+        df = word_tokenisation.benchmark(expected, actual)
+
+        _print(df.describe())
+
+        self.assertIsNotNone(df)
 
 if __name__ == '__main__':
     unittest.main()
