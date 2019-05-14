@@ -1,4 +1,4 @@
-# Thai Word Segmentation Benchmark
+# Word Tokenisation Benchmark for Thai
 
 ### Objectives
 - A framework for evaluating word segmentation quality for Thai
