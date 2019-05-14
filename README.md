@@ -1,7 +1,7 @@
 # Word Tokenisation Benchmark for Thai
 
 <div align="center">
-<img src="https://i.imgur.com/YSuWCTO.png"/>
+<img src="https://i.imgur.com/2IuLbyR.png"/>
 </div>
 
 ### Objectives
