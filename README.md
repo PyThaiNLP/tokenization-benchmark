@@ -1,11 +1,11 @@
 # Word Tokenisation Benchmark for Thai
 
+## Objective
+This repository is a framework for benchmarking tokenisation algorithms for Thai. It has a command-line interface that allows users to conviniently execute the benchmarks as well as a module interface for later use in their development pipelines.
+
 <div align="center">
     <img src="https://i.imgur.com/2IuLbyR.png"/>
 </div>
-
-## Objective
-This repository is a framework for benchmarking tokenisation algorithms for Thai. It has a command-line interface that allows users to conviniently execute the benchmarks as well as a module interface for later use in their development pipelines.
 
 ## Metrics
 ### Character-Level
@@ -38,8 +38,9 @@ pip ...
 2. Module Interface
     ```
     from pythainlp.benchmarks import word_tokenisation as bwt
-    # ref_samples = array of reference tokenised samples
-    # tokenised_samples = array of tokenised samples, aka. from your algorithm
+
+    ref_samples = array of reference tokenised samples
+    tokenised_samples = array of tokenised samples, aka. from your algorithm
 
     # dataframe contains metrics for each sample
     df = bwt.benchmark(ref_samples, tokenised_samples)
