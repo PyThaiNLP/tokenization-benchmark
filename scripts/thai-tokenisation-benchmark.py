@@ -40,7 +40,7 @@ print('Benchmarking %s against %s with %d samples in total' % (
 
 df_res = word_tokenisation.benchmark(expected, actual) \
     .describe() 
-df_res.columns = [
+df_res = df_res[[
     'char_level:tp',
     'char_level:tn',
     'char_level:fp',
@@ -49,7 +49,7 @@ df_res.columns = [
     'char_level:recall',
     'char_level:f1',
     'word_level:accuracy'
-]
+]]
 
 df_res = df_res.T.reset_index(0)
 

@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import pandas as pd
 
@@ -16,11 +17,41 @@ def flatten_dict(my_dict, parent_key="", sep=":"):
 
 def benchmark(ref_samples, samples):
     results = []
-    for r, s in zip(ref_samples, samples):
+    for i, (r, s) in enumerate(zip(ref_samples, samples)):
         stats = flatten_dict(_compute_stats(r, s))
         results.append(stats)
 
     return pd.DataFrame(results)
+
+def preprocessing(sample):
+    # prevent tailing separator and <NE></NE> tag
+    sample = re.sub(
+        re.compile("{sep}? ?{sep}$".format(sep=re.escape(SEPARATOR))),
+        "",
+        sample
+    )
+
+    sample = re.sub(
+        re.compile("^{sep}? ?{sep}".format(sep=re.escape(SEPARATOR))),
+        "",
+        sample
+    )
+
+    sample = re.sub(
+        "\s+",
+        "",
+        sample
+    )
+
+    sample = re.sub(
+        re.compile("{sep}+".format(sep=re.escape(SEPARATOR))),
+        SEPARATOR,
+        sample
+    )
+
+    sample = re.sub(r"<\/?[A-Z]+>", "", sample)
+
+    return sample
 
 def _compute_stats(ref_sample, sample):
     ref_sample, _ = _binary_representation(ref_sample)
@@ -28,6 +59,9 @@ def _compute_stats(ref_sample, sample):
 
     # Charater Level
     c_pos_pred, c_neg_pred = np.argwhere(sample==1), np.argwhere(sample==0)
+
+    c_pos_pred = c_pos_pred[c_pos_pred < ref_sample.shape[0]]
+    c_neg_pred = c_neg_pred[c_neg_pred < ref_sample.shape[0]]
 
     c_tp = np.sum(ref_sample[c_pos_pred] == 1)
     c_fp = np.sum(ref_sample[c_pos_pred] == 0)
@@ -46,7 +80,8 @@ def _compute_stats(ref_sample, sample):
 
     is_correctly_tokenised = []
     for st, end in zip(start_idx, stop_idx):
-        if sample[st] == 1 and np.sum(sample[st+1:end]) == 0:
+        pend = min(end, sample.shape[0])
+        if sample[st] == 1 and np.sum(sample[st+1:pend]) == 0:
             is_correctly_tokenised.append(1)
         else:
             is_correctly_tokenised.append(0)
@@ -70,6 +105,7 @@ def _compute_stats(ref_sample, sample):
 ผม|ไม่|ชอบ|กิน|ผัก -> 10100...
 """
 def _binary_representation(sample, verbose=False):
+    sample = preprocessing(sample)
     chars = np.array(list(sample))
     boundary = np.argwhere(chars == SEPARATOR).reshape(-1)
     boundary = boundary - np.array(range(boundary.shape[0]))
