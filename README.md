@@ -9,7 +9,16 @@ This repository is a framework for benchmarking tokenisation algorithms for Thai
 
 ## Metrics
 ### Character-Level
+    - True Positive (TP): no. of starting characters that are correctly predicted.
+    - True Negative (TN): no. of non-starting characters that are correctly predicted.
+    - False Positive (FP): no. of non-starting characters that are wrongly predicted as starting characters.
+    - False Negative (FN): no. of starting characters that are wrongly predicted as non-starting characters.
+    - Precision: TP / (TP + FP)
+    - Recall: TP / (TP+FN)
 ### Word-Level
+    - Correctly Tokenised Words (CTW): no. of words in reference that are correctly tokenised.
+    - Precision: CTW / no. words in reference solution
+    - Recall: CTW / no. words in sample
 
 ## Installation (TBD)
 ```
