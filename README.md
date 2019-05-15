@@ -37,6 +37,7 @@ pip ...
     word_level:recall      0.93±0.12  0.000000    1.0
         word_level:f1      0.93±0.13  0.000000    1.0
     ```
+
 2. Module Interface
     ```
     from pythainlp.benchmarks import word_tokenisation as bwt
