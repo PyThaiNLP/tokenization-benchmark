@@ -4,6 +4,10 @@ import pandas as pd
 
 SEPARATOR = "|"
 
+
+def _f1(precision, recall):
+    return 2*precision*recall / (precision + recall)
+
 def flatten_dict(my_dict, parent_key="", sep=":"):
     items = []
     for k, v in my_dict.items():
@@ -69,22 +73,20 @@ def _compute_stats(ref_sample, sample):
     c_tn = np.sum(ref_sample[c_neg_pred] == 0)
     c_fn = np.sum(ref_sample[c_neg_pred] == 1)
 
-    precision = c_tp / (c_tp + c_fp)
-    recall = c_tp / (c_tp + c_fn)
-    f1 = 2*(precision*recall) / (precision + recall)
+    c_precision = c_tp / (c_tp + c_fp)
+    c_recall = c_tp / (c_tp + c_fn)
+    c_f1 = _f1(c_precision, c_recall)
 
     # Word Level
-    boundary = np.argwhere(ref_sample == 1).reshape(-1)
-    start_idx = boundary
-    stop_idx = boundary[1:].tolist() + [ref_sample.shape[0]]
+    word_boundaries = _find_word_boudaries(ref_sample)
+    correctly_tokenised_words = _count_correctly_tokenised_words(
+        sample,
+        word_boundaries
+    )
 
-    is_correctly_tokenised = []
-    for st, end in zip(start_idx, stop_idx):
-        pend = min(end, sample.shape[0])
-        if sample[st] == 1 and np.sum(sample[st+1:pend]) == 0:
-            is_correctly_tokenised.append(1)
-        else:
-            is_correctly_tokenised.append(0)
+    w_precision = correctly_tokenised_words / np.sum(sample)
+    w_recall = correctly_tokenised_words / np.sum(ref_sample)
+    w_f1 = _f1(w_precision, w_recall)
 
     return {
         'char_level': {
@@ -92,12 +94,14 @@ def _compute_stats(ref_sample, sample):
             'fp': c_fp,
             'tn': c_tn,
             'fn': c_fn,
-            'precision': precision,
-            'recall': recall,
-            'f1': f1
+            'precision': c_precision,
+            'recall': c_recall,
+            'f1': c_f1
         },
         'word_level': {
-            'accuracy':  np.sum(is_correctly_tokenised) / len(is_correctly_tokenised)
+            'precision':  w_precision,
+            'recall':  w_recall,
+            'f1': w_f1
         }
     }
 
@@ -120,3 +124,31 @@ def _binary_representation(sample, verbose=False):
             print('%s -- %d' % (c, m))
 
     return bin_rept, sample_wo_seps
+
+"""
+sample: a binary representation
+return array of (start, stop) indicating starting and ending position of each word
+"""
+def _find_word_boudaries(sample):
+    boundary = np.argwhere(sample == 1).reshape(-1)
+    start_idx = boundary
+    stop_idx = boundary[1:].tolist() + [sample.shape[0]]
+
+    return zip(start_idx, stop_idx)
+
+"""
+sample: a binary representation
+word_boundaries: [ (start, stop), ... ]
+"""
+def _count_correctly_tokenised_words(sample, word_boundaries):
+    count = 0
+    for st, end in word_boundaries:
+        pend = min(end, sample.shape[0])
+        if ( sample[st] == 1 and np.sum(sample[st+1:pend]) == 0 ) \
+            and (
+                ( pend == sample.shape[0] ) or
+                ( pend != sample.shape[0] and sample[pend] == 1 )
+            ):
+            count = count + 1
+
+    return count
