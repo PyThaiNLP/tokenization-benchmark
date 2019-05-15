@@ -6,6 +6,8 @@ SEPARATOR = "|"
 
 
 def _f1(precision, recall):
+    if precision == recall == 0:
+        return 0
     return 2*precision*recall / (precision + recall)
 
 def flatten_dict(my_dict, parent_key="", sep=":"):
