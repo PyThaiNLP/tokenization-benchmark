@@ -11,14 +11,9 @@ parser.add_argument('--input',
     """
 )
 
-parser.add_argument('--dataset',
+parser.add_argument('--test-file',
     action="store",
-    help="[orchid|best]"
-)
-
-parser.add_argument('--custom-test-file',
-    action="store",
-    help="path to your custom test file"
+    help="path to test file"
 )
 
 args = parser.parse_args()
