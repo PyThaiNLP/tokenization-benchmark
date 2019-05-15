@@ -15,10 +15,12 @@ This repository is a framework for benchmarking tokenisation algorithms for Thai
 - False Negative (FN): no. of starting characters that are wrongly predicted as non-starting characters.
 - Precision: TP / (TP + FP)
 - Recall: TP / (TP+FN)
+- f1: ...
 ### Word-Level
 - Correctly Tokenised Words (CTW): no. of words in reference that are correctly tokenised.
 - Precision: CTW / no. words in reference solution
 - Recall: CTW / no. words in sample
+- f1: ...
 
 ## Installation (TBD)
 ```
