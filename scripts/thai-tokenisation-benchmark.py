@@ -48,7 +48,8 @@ df_res = df_res[[
     'char_level:precision',
     'char_level:recall',
     'char_level:f1',
-    'word_level:accuracy'
+    'word_level:precision',
+    'word_level:recall',
 ]]
 
 df_res = df_res.T.reset_index(0)
