@@ -25,12 +25,12 @@ def _read_file(path):
 
 print(args.input)
 actual = _read_file(args.input)
-expected = _read_file(args.custom_test_file)
+expected = _read_file(args.test_file)
 
 assert len(actual) == len(expected), \
     'Input and test files do not have the same number of samples'
 print('Benchmarking %s against %s with %d samples in total' % (
-    args.input, args.custom_test_file, len(actual)
+    args.input, args.test_file, len(actual)
     ))
 
 df_res = word_tokenisation.benchmark(expected, actual) \
