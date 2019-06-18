@@ -44,7 +44,7 @@ def benchmark(ref_samples, samples):
 
     return pd.DataFrame(results)
 
-def preprocessing(sample):
+def preprocessing(sample, remove_space=True):
     # prevent tailing separator and <NE></NE> tag
     sample = re.sub(
         re.compile("{sep}? ?{sep}$".format(sep=re.escape(SEPARATOR))),
@@ -58,11 +58,12 @@ def preprocessing(sample):
         sample
     )
 
-    sample = re.sub(
-        "\s+",
-        "",
-        sample
-    )
+    if remove_space:
+        sample = re.sub(
+            "\s+",
+            "",
+            sample
+        )
 
     sample = re.sub(
         re.compile("{sep}+".format(sep=re.escape(SEPARATOR))),
@@ -114,7 +115,7 @@ def _compute_stats(ref_sample, raw_sample):
     )
 
     tokenisation_indicators = _expand_tokenisation_indicators(
-        preprocessing(raw_sample),
+        preprocessing(raw_sample, remove_space=False),
         tokenisation_indicators
     )
 
