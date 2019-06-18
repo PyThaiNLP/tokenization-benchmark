@@ -20,7 +20,7 @@ This repository is a framework for benchmarking tokenisation algorithms for Thai
 - Correctly Tokenised Words (CTW): no. of words in reference that are correctly tokenised.
 - Precision: CTW / no. words in reference solution
 - Recall: CTW / no. words in sample
-- f1: ...
+-**** f1: ...
 
 ## Installation (TBD)
 ```
@@ -30,9 +30,10 @@ pip ...
 ## Usages (to be updated)
 1. Command-line Interface 
     ```
-    > python ./scripts/tokenisation-benchmark.py \
-        --input ./data/best-2010-deepcut.txt \
-        --dataset best-2010
+    PYTHONPATH=`pwd` python scripts/thai-tokenisation-benchmark.py \
+    --test-file ./data/best-2010/TEST_100K_ANS.txt \
+    --input ./data/best-2010-syllable.txt
+
     # Sample output
     Benchmarking ./data/best-2010-deepcut.txt against ./data/best-2010/TEST_100K_ANS.txt with 2252 samples in total
     ============== Benchmark Result ==============
@@ -59,6 +60,12 @@ pip ...
     # dataframe contains metrics for each sample
     df = bwt.benchmark(ref_samples, tokenised_samples)
     ```
+
+## Developments
+```
+# unitests
+$ TEST_VERBOSE=1 PYTHONPATH=. python tests/__init__.py
+```
 
 ## Acknowledgements
 TBD.

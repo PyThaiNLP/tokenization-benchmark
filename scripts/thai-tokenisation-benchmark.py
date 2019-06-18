@@ -1,4 +1,8 @@
+import json
+import os
 import argparse
+import yaml
+
 from pythainlp.benchmarks import word_tokenisation
 
 parser = argparse.ArgumentParser(description='Short sample app')
@@ -33,7 +37,9 @@ print('Benchmarking %s against %s with %d samples in total' % (
     args.input, args.test_file, len(actual)
     ))
 
-df_res = word_tokenisation.benchmark(expected, actual) \
+df_raw = word_tokenisation.benchmark(expected, actual)
+
+df_res =  df_raw\
     .describe() 
 df_res = df_res[[
     'char_level:tp',
@@ -59,3 +65,42 @@ df_res['metric'] = df_res['index']
 
 print("============== Benchmark Result ==============")
 print(df_res[['metric', 'mean±std', 'min', 'max']].to_string(index=False))
+
+
+# save file to json
+data = {}
+for r in df_res.to_dict('records'):
+    metric = r['index']
+    del r['index']
+    data[metric] = r
+
+dir_name = os.path.dirname(args.input)
+file_name = args.input.split("/")[-1].split(".")[0]
+
+res_path = "%s/eval-%s.yml" % (dir_name, file_name)
+print("Evaluation result is saved to %s." % res_path)
+with open(res_path, 'w') as outfile:
+    yaml.dump(data, outfile, default_flow_style=False)
+
+
+res_path = "%s/eval-details-%s.json" % (dir_name, file_name)
+with open(res_path, "w") as f:
+    samples = []
+    for i, r in enumerate(df_raw.to_dict("records")):
+        expected, actual = r["expected"], r["actual"]
+        del r["expected"]
+        del r["actual"]
+
+        samples.append(dict(
+            metrics=r,
+            expected=expected,
+            actual=actual,
+            id=i
+        ))
+
+    details = dict(
+        metrics=data,
+        samples=samples
+    )
+
+    json.dump(details,f, ensure_ascii=False)

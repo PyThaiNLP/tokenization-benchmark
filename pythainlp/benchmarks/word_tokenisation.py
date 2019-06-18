@@ -4,7 +4,6 @@ import pandas as pd
 
 SEPARATOR = "|"
 
-
 def _f1(precision, recall):
     if precision == recall == 0:
         return 0
@@ -24,8 +23,20 @@ def flatten_dict(my_dict, parent_key="", sep=":"):
 def benchmark(ref_samples, samples):
     results = []
     for i, (r, s) in enumerate(zip(ref_samples, samples)):
-        stats = flatten_dict(_compute_stats(r, s))
-        results.append(stats)
+        try:
+            r, s = r.strip(), s.strip()
+            if r and s:
+                stats = flatten_dict(_compute_stats(r, s))
+                stats["expected"] = r
+                stats["actual"] = s
+                results.append(stats)
+        except:
+            print("This pair is failed. (i=%d)" % i)
+            print("------ label --------")
+            print(r)
+            print("------- sample -----")
+            print(s)
+            raise SystemExit("Force die")
 
     return pd.DataFrame(results)
 
