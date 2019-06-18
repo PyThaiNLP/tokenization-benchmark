@@ -1,4 +1,6 @@
+import sys
 import re
+
 import numpy as np
 import pandas as pd
 
@@ -26,11 +28,13 @@ def benchmark(ref_samples, samples):
         try:
             r, s = r.strip(), s.strip()
             if r and s:
-                stats = flatten_dict(_compute_stats(r, s))
+                stats = _compute_stats(r, s)
+                stats = flatten_dict(stats)
                 stats["expected"] = r
                 stats["actual"] = s
                 results.append(stats)
         except:
+            print(sys.exc_info())
             print("This pair is failed. (i=%d)" % i)
             print("------ label --------")
             print(r)
@@ -70,9 +74,9 @@ def preprocessing(sample):
 
     return sample
 
-def _compute_stats(ref_sample, sample):
+def _compute_stats(ref_sample, raw_sample):
     ref_sample, _ = _binary_representation(ref_sample)
-    sample, _ = _binary_representation(sample)
+    sample, _ = _binary_representation(raw_sample)
 
     # Charater Level
     c_pos_pred, c_neg_pred = np.argwhere(sample==1), np.argwhere(sample==0)
@@ -92,6 +96,7 @@ def _compute_stats(ref_sample, sample):
 
     # Word Level
     word_boundaries = _find_word_boudaries(ref_sample)
+
     correctly_tokenised_words = _count_correctly_tokenised_words(
         sample,
         word_boundaries
@@ -100,6 +105,20 @@ def _compute_stats(ref_sample, sample):
     w_precision = correctly_tokenised_words / np.sum(sample)
     w_recall = correctly_tokenised_words / np.sum(ref_sample)
     w_f1 = _f1(w_precision, w_recall)
+
+
+    ss_boundaries = _find_word_boudaries(sample)
+    tokenisation_indicators = _find_words_correctly_tokenised(
+        word_boundaries,
+        ss_boundaries
+    )
+
+    tokenisation_indicators = _expand_tokenisation_indicators(
+        preprocessing(raw_sample),
+        tokenisation_indicators
+    )
+
+    tokenisation_indicators = list(map(lambda x: str(x), tokenisation_indicators))
 
     return {
         'char_level': {
@@ -115,6 +134,9 @@ def _compute_stats(ref_sample, sample):
             'precision':  w_precision,
             'recall':  w_recall,
             'f1': w_f1
+        },
+        'global': {
+            'tokenisation_indicators': "".join(tokenisation_indicators) 
         }
     }
 
@@ -147,7 +169,7 @@ def _find_word_boudaries(sample):
     start_idx = boundary
     stop_idx = boundary[1:].tolist() + [sample.shape[0]]
 
-    return zip(start_idx, stop_idx)
+    return list(zip(start_idx, stop_idx))
 
 """
 sample: a binary representation
@@ -165,3 +187,26 @@ def _count_correctly_tokenised_words(sample, word_boundaries):
             count = count + 1
 
     return count
+
+def _find_words_correctly_tokenised(ref_boundaries, predicted_boundaries):
+    ref_b = dict(zip(ref_boundaries, [1]*len(ref_boundaries)))
+
+    labels = tuple(map(lambda x: ref_b.get(x, 0), predicted_boundaries))
+    return labels
+
+def _expand_tokenisation_indicators(samples, indicators):
+    tokens = samples.split(SEPARATOR)
+
+    total_tokens = len(tokens)
+
+    total_empty_tokens = 0
+    new_indicators = []
+    for i, t in enumerate(tokens):
+        if t == " ":
+            new_indicators.append(1)
+            total_empty_tokens += 1
+        else:
+            new_indicators.append(indicators[i-total_empty_tokens])
+
+    assert len(new_indicators) == total_tokens
+    return new_indicators

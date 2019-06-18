@@ -44,7 +44,6 @@ class TestSegmentationBenchmark(unittest.TestCase):
             actual.append(pair['actual'])
 
         df = word_tokenisation.benchmark(expected, actual)
-        print(df)
 
         _print(df.describe())
 
@@ -62,6 +61,30 @@ class TestSegmentationBenchmark(unittest.TestCase):
                 d['expected_count']
             )
 
+    def test_words_correctly_tokenised(self):
+        r = [(0, 2), (2, 10), (10, 12) ]
+        s = [(0, 10), (10, 12)]
+
+        expected = "01"
+
+        labels = word_tokenisation._find_words_correctly_tokenised(r, s)
+        self.assertEqual(expected, "".join(np.array(labels).astype(str)))
+
+    def test_expand_tokenisation_indicators(self):
+        r = "อากาศ|ร้อน| |มาก|ครับ"
+        s = "อากาศร้อน| |มากครับ"
+
+        rb, _ = word_tokenisation._binary_representation(r)
+        rb = word_tokenisation._find_word_boudaries(rb)
+
+        sb, _ = word_tokenisation._binary_representation(s)
+        sb = word_tokenisation._find_word_boudaries(sb)
+
+        labels = word_tokenisation._find_words_correctly_tokenised(rb, sb)
+        labels = word_tokenisation._expand_tokenisation_indicators(s, labels)
+
+        expected = "010"
+        self.assertEqual(expected, "".join(np.array(labels).astype(str)))
 
 if __name__ == '__main__':
     unittest.main()
