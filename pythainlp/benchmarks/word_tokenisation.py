@@ -26,7 +26,7 @@ def benchmark(ref_samples, samples):
     results = []
     for i, (r, s) in enumerate(zip(ref_samples, samples)):
         try:
-            r, s = r.strip(), s.strip()
+            r, s = preprocessing(r), preprocessing(s)
             if r and s:
                 stats = _compute_stats(r, s)
                 stats = flatten_dict(stats)
@@ -73,6 +73,12 @@ def preprocessing(sample, remove_space=True):
 
     sample = re.sub(r"<\/?[A-Z]+>", "", sample)
 
+    sample = re.sub(
+        re.compile("{sep}$".format(sep=re.escape(SEPARATOR))),
+        "",
+        sample
+    ).strip()
+
     return sample
 
 def _compute_stats(ref_sample, raw_sample):
@@ -114,11 +120,6 @@ def _compute_stats(ref_sample, raw_sample):
         ss_boundaries
     )
 
-    tokenisation_indicators = _expand_tokenisation_indicators(
-        preprocessing(raw_sample, remove_space=False),
-        tokenisation_indicators
-    )
-
     tokenisation_indicators = list(map(lambda x: str(x), tokenisation_indicators))
 
     return {
@@ -145,7 +146,6 @@ def _compute_stats(ref_sample, raw_sample):
 ผม|ไม่|ชอบ|กิน|ผัก -> 10100...
 """
 def _binary_representation(sample, verbose=False):
-    sample = preprocessing(sample)
     chars = np.array(list(sample))
     boundary = np.argwhere(chars == SEPARATOR).reshape(-1)
     boundary = boundary - np.array(range(boundary.shape[0]))
