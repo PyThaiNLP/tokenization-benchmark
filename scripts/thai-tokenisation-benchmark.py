@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 import os
 import argparse
@@ -23,7 +25,7 @@ parser.add_argument('--test-file',
 args = parser.parse_args()
 
 def _read_file(path):
-    with open(path, 'r') as f:
+    with open(path, "r", encoding="utf-8") as f:
         lines = map(lambda r: r.strip(), f.readlines())
     return list(lines)
 

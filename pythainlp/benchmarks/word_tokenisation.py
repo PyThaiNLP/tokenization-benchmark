@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 import re
 
@@ -138,7 +140,7 @@ def _compute_stats(ref_sample, raw_sample):
             'f1': w_f1
         },
         'global': {
-            'tokenisation_indicators': "".join(tokenisation_indicators) 
+            'tokenisation_indicators': "".join(tokenisation_indicators)
         }
     }
 
