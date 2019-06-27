@@ -1,3 +1,6 @@
 *__pycache__
 venv
 .vscode
+*.pyc
+data/*
+venv-python3
