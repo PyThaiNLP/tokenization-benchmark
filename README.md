@@ -1,14 +1,13 @@
 # Word Tokenisation Benchmark for Thai
 
-## Objective
 This repository is a framework for benchmarking tokenisation algorithms for Thai. It has a command-line interface that allows users to conviniently execute the benchmarks as well as a module interface for later use in their development pipelines.
 
+## Metrics
 <div align="center">
     <img src="https://i.imgur.com/jVBOLa2.png"/>
 </div>
 
-## Metrics
-### Character-Level
+### Character-Level (CL)
 - True Positive (TP): no. of starting characters that are correctly predicted.
 - True Negative (TN): no. of non-starting characters that are correctly predicted.
 - False Positive (FP): no. of non-starting characters that are wrongly predicted as starting characters.
@@ -16,13 +15,34 @@ This repository is a framework for benchmarking tokenisation algorithms for Thai
 - Precision: TP / (TP + FP)
 - Recall: TP / (TP+FN)
 - f1: ...
-### Word-Level
+
+
+### Word-Level (WL)
 - Correctly Tokenised Words (CTW): no. of words in reference that are correctly tokenised.
 - Precision: CTW / no. words in reference solution
 - Recall: CTW / no. words in sample
 -**** f1: ...
 
-## Installation (TBD)
+## Benchmark Results
+
+| Vendor | Approach | Datasets |
+|---|---|---|
+| DeepCut | CNN | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.97±0.07)-yellow.svg)][res-BEST-val-DeepCut] [![](https://img.shields.io/badge/THNC-WL:f1(0.63±0.26)-yellow.svg)][res-THNC-DeepCut] [![](https://img.shields.io/badge/Orchid-WL:f1(0.66±0.25)-yellow.svg)][res-Orchid-DeepCut] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.80±0.20)-yellow.svg)][res-WiseSight160-DeepCut] |
+| PyThaiNLP-newmm | dictionary-based | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.68±0.15)-yellow.svg)][res-BEST-val-PyThaiNLP-newmm] [![](https://img.shields.io/badge/THNC-WL:f1(0.73±0.21)-yellow.svg)][res-THNC-PyThaiNLP-newmm] [![](https://img.shields.io/badge/Orchid-WL:f1(0.72±0.24)-yellow.svg)][res-Orchid-PyThaiNLP-newmm] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.72±0.20)-yellow.svg)][res-WiseSight160-PyThaiNLP-newmm] |
+| Sertis-BiGRU | Bi-directional RNN | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.93±0.12)-yellow.svg)][res-BEST-val-Sertis-BiGRU] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.81±0.18)-yellow.svg)][res-WiseSight160-Sertis-BiGRU] |
+
+[res-BEST-val-DeepCut]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=BEST-val-DeepCut
+[res-THNC-DeepCut]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=THNC-DeepCut
+[res-Orchid-DeepCut]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=Orchid-DeepCut
+[res-WiseSight160-DeepCut]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=WiseSight160-DeepCut
+[res-BEST-val-PyThaiNLP-newmm]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=BEST-val-PyThaiNLP-newmm
+[res-THNC-PyThaiNLP-newmm]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=THNC-PyThaiNLP-newmm
+[res-Orchid-PyThaiNLP-newmm]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=Orchid-PyThaiNLP-newmm
+[res-WiseSight160-PyThaiNLP-newmm]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=WiseSight160-PyThaiNLP-newmm
+[res-BEST-val-Sertis-BiGRU]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=BEST-val-Sertis-BiGRU
+[res-WiseSight160-Sertis-BiGRU]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=WiseSight160-Sertis-BiGRU
+
+## Installation (WIP)
 ```
 pip ...
 ```
@@ -60,6 +80,9 @@ pip ...
     # dataframe contains metrics for each sample
     df = bwt.benchmark(ref_samples, tokenised_samples)
     ```
+    
+## Related Work
+- [Thai Tokenisers Docker][docker]: collection of pre-built Thai tokenisers Docker containers.
 
 ## Developments
 ```
@@ -68,4 +91,6 @@ $ TEST_VERBOSE=1 PYTHONPATH=. python tests/__init__.py
 ```
 
 ## Acknowledgements
-TBD.
+TBD. [sdf][res] [res-orchid-deepcut]
+
+[docker]: https://github.com/PyThaiNLP/docker-thai-tokenizers
