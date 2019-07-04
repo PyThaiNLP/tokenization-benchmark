@@ -36,13 +36,18 @@ def benchmark(ref_samples, samples):
                 stats["actual"] = s
                 results.append(stats)
         except:
-            print(sys.exc_info())
-            print("This pair is failed. (i=%d)" % i)
-            print("------ label --------")
-            print(r)
-            print("------- sample -----")
-            print(s)
-            raise SystemExit("Force die")
+            reason = """
+[Error]
+Reason: %s
+
+Pair (i=%d)
+--- label
+%s
+--- sample
+%s
+""" % (sys.exc_info(), i, r, s)
+
+            raise SystemExit(reason)
 
     return pd.DataFrame(results)
 
