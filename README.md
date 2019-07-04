@@ -91,6 +91,8 @@ $ TEST_VERBOSE=1 PYTHONPATH=. python tests/__init__.py
 ```
 
 ## Acknowledgements
-TBD. [sdf][res] [res-orchid-deepcut]
+This project was initiallly started by [Pattarawat Chormai][pat], while he was interning at [Dr. Attapol Thamrongrattanarit][ate]'s lab.
 
 [docker]: https://github.com/PyThaiNLP/docker-thai-tokenizers
+[ate]: https://attapol.github.io
+[pat]: https://pat.chormai.org
