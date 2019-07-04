@@ -1,5 +1,8 @@
 # Word Tokenisation Benchmark for Thai
 
+![](https://travis-ci.org/PyThaiNLP/tokenization-benchmark.svg?branch=master)
+
+
 This repository is a framework for benchmarking tokenisation algorithms for Thai. It has a command-line interface that allows users to conviniently execute the benchmarks as well as a module interface for later use in their development pipelines.
 
 ## Metrics
