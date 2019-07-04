@@ -25,11 +25,13 @@ This repository is a framework for benchmarking tokenisation algorithms for Thai
 
 ## Benchmark Results
 
+
 | Vendor | Approach | Datasets |
 |---|---|---|
-| DeepCut | CNN | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.97±0.07)-yellow.svg)][res-BEST-val-DeepCut] [![](https://img.shields.io/badge/THNC-WL:f1(0.63±0.26)-yellow.svg)][res-THNC-DeepCut] [![](https://img.shields.io/badge/Orchid-WL:f1(0.66±0.25)-yellow.svg)][res-Orchid-DeepCut] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.80±0.20)-yellow.svg)][res-WiseSight160-DeepCut] |
-| PyThaiNLP-newmm | dictionary-based | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.68±0.15)-yellow.svg)][res-BEST-val-PyThaiNLP-newmm] [![](https://img.shields.io/badge/THNC-WL:f1(0.73±0.21)-yellow.svg)][res-THNC-PyThaiNLP-newmm] [![](https://img.shields.io/badge/Orchid-WL:f1(0.72±0.24)-yellow.svg)][res-Orchid-PyThaiNLP-newmm] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.72±0.20)-yellow.svg)][res-WiseSight160-PyThaiNLP-newmm] |
-| Sertis-BiGRU | Bi-directional RNN | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.93±0.12)-yellow.svg)][res-BEST-val-Sertis-BiGRU] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.81±0.18)-yellow.svg)][res-WiseSight160-Sertis-BiGRU] |
+| DeepCut | CNN | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.9732)-yellow.svg)][res-BEST-val-DeepCut] [![](https://img.shields.io/badge/THNC-WL:f1(0.6323)-yellow.svg)][res-THNC-DeepCut] [![](https://img.shields.io/badge/Orchid-WL:f1(0.6638)-yellow.svg)][res-Orchid-DeepCut] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.8042)-yellow.svg)][res-WiseSight160-DeepCut] |
+| PyThaiNLP-newmm | dictionary-based | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.6836)-yellow.svg)][res-BEST-val-PyThaiNLP-newmm] [![](https://img.shields.io/badge/THNC-WL:f1(0.7338)-yellow.svg)][res-THNC-PyThaiNLP-newmm] [![](https://img.shields.io/badge/Orchid-WL:f1(0.7223)-yellow.svg)][res-Orchid-PyThaiNLP-newmm] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.7248)-yellow.svg)][res-WiseSight160-PyThaiNLP-newmm] |
+| Sertis-BiGRU | Bi-directional RNN | [![](https://img.shields.io/badge/BEST:val-WL:f1(0.9251)-yellow.svg)][res-BEST-val-Sertis-BiGRU] [![](https://img.shields.io/badge/WiseSight160-WL:f1(0.8115)-yellow.svg)][res-WiseSight160-Sertis-BiGRU] |
+
 
 [res-BEST-val-DeepCut]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=BEST-val-DeepCut
 [res-THNC-DeepCut]: https://pythainlp.github.io/tokenization-benchmark-visualization/?experiment-name=THNC-DeepCut
