@@ -28,9 +28,10 @@ class TestSegmentationBenchmark(unittest.TestCase):
             exp, act = pair['expected'], pair['actual']
 
             _print('Expected: %s\n  Actual: %s' % (exp, act))
+
             result = word_tokenisation._compute_stats(
-                exp,
-                act
+                word_tokenisation.preprocessing(exp),
+                word_tokenisation.preprocessing(act)
             ) 
 
             _print(result)
@@ -68,22 +69,6 @@ class TestSegmentationBenchmark(unittest.TestCase):
         expected = "01"
 
         labels = word_tokenisation._find_words_correctly_tokenised(r, s)
-        self.assertEqual(expected, "".join(np.array(labels).astype(str)))
-
-    def test_expand_tokenisation_indicators(self):
-        r = "อากาศ|ร้อน| |มาก|ครับ"
-        s = "อากาศร้อน| |มากครับ"
-
-        rb, _ = word_tokenisation._binary_representation(r)
-        rb = word_tokenisation._find_word_boudaries(rb)
-
-        sb, _ = word_tokenisation._binary_representation(s)
-        sb = word_tokenisation._find_word_boudaries(sb)
-
-        labels = word_tokenisation._find_words_correctly_tokenised(rb, sb)
-        labels = word_tokenisation._expand_tokenisation_indicators(s, labels)
-
-        expected = "010"
         self.assertEqual(expected, "".join(np.array(labels).astype(str)))
 
 if __name__ == '__main__':

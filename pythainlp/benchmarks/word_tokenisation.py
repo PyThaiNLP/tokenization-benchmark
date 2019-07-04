@@ -154,8 +154,10 @@ def _compute_stats(ref_sample, raw_sample):
 """
 def _binary_representation(sample, verbose=False):
     chars = np.array(list(sample))
+
     boundary = np.argwhere(chars == SEPARATOR).reshape(-1)
     boundary = boundary - np.array(range(boundary.shape[0]))
+
     bin_rept = np.zeros(len(sample) - boundary.shape[0])
     bin_rept[list(boundary) + [0]] = 1
 
@@ -201,20 +203,3 @@ def _find_words_correctly_tokenised(ref_boundaries, predicted_boundaries):
 
     labels = tuple(map(lambda x: ref_b.get(x, 0), predicted_boundaries))
     return labels
-
-def _expand_tokenisation_indicators(samples, indicators):
-    tokens = samples.split(SEPARATOR)
-
-    total_tokens = len(tokens)
-
-    total_empty_tokens = 0
-    new_indicators = []
-    for i, t in enumerate(tokens):
-        if t == " ":
-            new_indicators.append(1)
-            total_empty_tokens += 1
-        else:
-            new_indicators.append(indicators[i-total_empty_tokens])
-
-    assert len(new_indicators) == total_tokens
-    return new_indicators
