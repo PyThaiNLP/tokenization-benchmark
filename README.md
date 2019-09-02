@@ -1,7 +1,6 @@
-# Word Tokenisation Benchmark for Thai
+# Word Tokenisation Benchmark for Thai (obsolete)
 
-![](https://travis-ci.org/PyThaiNLP/tokenization-benchmark.svg?branch=master)
-
+**Warning:** The code of this project has been migrated to PyThaiNLP (https://github.com/PyThaiNLP/pythainlp/pull/248). Please check PyThaiNLP's document for further details.
 
 This repository is a framework for benchmarking tokenisation algorithms for Thai. It has a command-line interface that allows users to conviniently execute the benchmarks as well as a module interface for later use in their development pipelines.
 
